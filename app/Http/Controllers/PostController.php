@@ -48,9 +48,11 @@ class PostController extends Controller
      */
     public function store(BlogCreateRequest $request)
     {
+     $slug = implode('-', explode(" ", $request->title));
       
       $post = new Post([
            'title' => $request->title,
+           'slug'  => $slug,
            'body'  => $request->body,
            'category_id' => $request->category
 
@@ -59,31 +61,31 @@ class PostController extends Controller
 
       $post->save();
       session()->flash('success', 'The blog post was successfully created!');
-      return redirect()->route('post.index');
+      return redirect()->route('post.show', $post->slug);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $post = Post::find($id);
+        $post = Post::where('slug', $slug)->first();
         return view('post.show')->withPost($post);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        $post = Post::find($id);
+        $post = Post::where('slug', $slug)->first();
         $categories = Category::all();
         return view('post.edit')->withPost($post)->withCategories($categories);
     }
@@ -92,14 +94,18 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+
+        $slug = implode('-', explode(" ", $request->title));
         $post = Post::find($id);
+
         $post->fill([
            'title' => $request->title,
+           'slug'  => $slug,
            'body'  => $request->body,
            'category_id' => $request->category,
 
@@ -107,18 +113,18 @@ class PostController extends Controller
 
         $post->save();
         session()->flash('success', 'The post has been updated successfully');
-        return redirect()->route('post.show', $post->id);
+        return redirect()->route('post.show', $post->slug);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-       $post = Post::find($id);
+       $post = Post::where('slug', $slug)->first();
        $post->delete();
        session()->flash('success', 'Post has been deleted');
        return redirect()->route('post.index');

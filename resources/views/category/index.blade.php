@@ -18,7 +18,7 @@
 			  	 <tbody>
 			  	 	<?php $i =1; ?>
                    @foreach($categories as $category)
-			  	  <tr> <th scope="row">{{$i}}</th> <td ><a href="{{route('category.show', $category->id)}}">{{$category->name}}</a></td></tr> 	
+			  	  <tr> <th scope="row">{{$i}}</th> <td ><a href="{{route('category.show', $category->slug)}}">{{$category->name}}</a></td></tr> 	
 			  	  <?php $i++; ?>
                    @endforeach
 			  	</tbody> 

@@ -39,7 +39,7 @@
 				@if($posts->all())
 
 					@foreach($posts as $post)
-	                  <a href="{{route('post.show', $post->id)}}"><span class="label label-default"  >{{$post->title}}</span></a>
+	                  <a href="{{route('post.show', $post->slug)}}"><span class="label label-default"  >{{$post->title}}</span></a>
 					@endforeach
 
 				@else
@@ -55,13 +55,13 @@
 	
 	<div class="col-md-2 ">
 			
-			<a href="{{route('category.edit', $category->id)}}" type="button" class="btn btn-success pull-right ">Edit</a>		     
+			<a href="{{route('category.edit', $category->slug)}}" type="button" class="btn btn-success pull-right ">Edit</a>		     
 
 	</div>
 
     <div class="col-md-2">
     	
-    	<form action="{{route('category.destroy', $category->id)}}" method="POST"  >
+    	<form action="{{route('category.destroy', $category->slug)}}" method="POST"  >
 				{{csrf_field()}}
 				{{method_field('DELETE')}}
 			   <input type="submit" class="btn btn-danger" value="Delete" >

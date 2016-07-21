@@ -18,7 +18,7 @@
 			  	 <tbody>
 			  	 	<?php $i =1; ?>
                    @foreach($posts as $post)
-			  	  <tr> <th scope="row">{{$i}}</th> <td ><a href="{{route('post.show', $post->id)}}">{{$post->title}}</a></td></tr> 	
+			  	  <tr> <th scope="row">{{$i}}</th> <td ><a href="{{route('post.show', $post->slug)}}">{{$post->title}}</a></td></tr> 	
 			  	  <?php $i++; ?>
                    @endforeach
 			  	</tbody> 

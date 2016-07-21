@@ -46,27 +46,29 @@ class CategoryController extends Controller
      */
     public function store(CategoryCreateRequest $request)
     {
+        $slug = implode('-', explode(" ", $request->name));
         $category = new Category([
             'name' => $request->name,
+            'slug' => $slug,
             'detail' => $request->detail,
 
             ]);
 
         $category->save();
         session()->flash('success', 'New category has been created successfully');
-        return redirect()->route('category.show', $category->id);
+        return redirect()->route('category.show', $category->slug);
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $category = Category::find($id);
+        $category = Category::where('slug', $slug)->first();
         $posts = $category->posts;
         return view('category.show')->withCategory($category)->withPosts($posts);
     }
@@ -74,12 +76,12 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        $category = Category::find($id);
+        $category = Category::where('slug', $slug)->first();
 
         return view('category.edit')->withCategory($category);
     }
@@ -88,32 +90,34 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+        $slug = implode('-', explode(" ", $request->name));
         $category = Category::find($id);
         $category->fill([
            'name' => $request->name,
+           'slug' => $slug,
            'detail'  => $request->detail
 
             ]);
 
         $category->save();
         session()->flash('success', 'The category has been updated successfully');
-        return redirect()->route('category.show', $category->id);
+        return redirect()->route('category.show', $category->slug);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $category = Category::find($id);
+        $category = Category::where('slug', $slug)->first();
        $category->delete();
        session()->flash('success', 'Category has been deleted');
        return redirect()->route('category.index');
