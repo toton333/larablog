@@ -9,8 +9,19 @@
 			  <div class="panel-heading">
 			  	<h3 >{{$post->title}}</h3>
                 @if($post->category)
-			  	<h6> Category : <a href="{{route('category.show', $post->category->slug)}}"><span class="label label-default">{{$post->category->name}}</span></a></h6>
+			  	Category : <a href="{{route('category.show', $post->category->slug)}}"><span class="label label-default">{{$post->category->name}}</span></a> 
                 @endif
+                &nbsp; &nbsp; &nbsp;
+                @if($post->tags->first())
+
+                       Tags :
+                   @foreach($post->tags as $tag)
+                       <a href="{{route('tag.show', $tag->slug)}}"><span class="label label-default">{{$tag->name}}</span></a>
+
+                   @endforeach
+                
+                @endif
+             
 			  	
 			  </div>
 

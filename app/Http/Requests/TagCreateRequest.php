@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class BlogCreateRequest extends Request
+class TagCreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,30 +24,21 @@ class BlogCreateRequest extends Request
     public function rules()
     {
         return [
-            'title' => 'required|min:3|max:50',
-            'body'  => 'required',
-            'tag'   => 'unique:tags,name'
+            'name' => 'required|min:3|max:50|unique:tags',
+            'description'  => 'required'
         ];
     }
 
-    /**
-     * Custom error messages.
-     *
-     * @return array
-     */
-
-    public function messages(){
+   public function messages(){
 
 
         return [
 
-            'title.required' => 'Please insert a :attribute of this post ',
-            'body.required'  => 'Please write some content'
+            'name.required' => 'Please insert a :attribute of this tag ',
+            'description.required'  => 'Please write something about this tag ',
 
         ];
     }
-
-
 
 
 }

@@ -9,6 +9,7 @@ use App\Http\Requests\BlogCreateRequest;
 
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -37,7 +38,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('post.create')->withCategories($categories);
+        $tags       = Tag::all();
+        return view('post.create')->withCategories($categories)->withTags($tags);
     }
 
     /**
@@ -48,6 +50,40 @@ class PostController extends Controller
      */
     public function store(BlogCreateRequest $request)
     {
+
+     //tag creation
+        //if new tags are created , we  save them to tags table
+
+        $idOfRequestTags = []; //this array of tags id are needed for syncing to post_tag table
+
+        $existingTags = Tag::lists('id')->all();
+        
+        
+        foreach ($request->tag as $name) {
+            if (!in_array($name, $existingTags)) {
+              
+                $tagSlug = implode('-', explode(" ", $name));
+
+                $newTag = new Tag([
+                'name' => $name,
+                'slug' => $tagSlug,
+                'detail' => "",
+
+                ]);
+
+                 $newTag->save();  
+                 $idOfRequestTags[] = $newTag->id;
+
+              }else{
+
+                  $idOfRequestTags[] = $name;
+
+              }
+
+        }
+      
+
+    //post creation
      $slug = implode('-', explode(" ", $request->title));
       
       $post = new Post([
@@ -57,9 +93,11 @@ class PostController extends Controller
            'category_id' => $request->category
 
         ]);
-
-
       $post->save();
+
+      $post->tags()->sync($idOfRequestTags, false);
+
+
       session()->flash('success', 'The blog post was successfully created!');
       return redirect()->route('post.show', $post->slug);
 
@@ -87,7 +125,8 @@ class PostController extends Controller
     {
         $post = Post::where('slug', $slug)->first();
         $categories = Category::all();
-        return view('post.edit')->withPost($post)->withCategories($categories);
+        $tags       = Tag::all();
+        return view('post.edit')->withPost($post)->withCategories($categories)->withTags($tags);
     }
 
     /**
@@ -99,6 +138,36 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+         //tag creation
+        //if new tags are created , we  save them to tags table
+
+        $idOfRequestTags = []; //this array of tags id are needed for syncing to post_tag table
+
+        $existingTags = Tag::lists('id')->all();
+        
+        if($request->tag){
+          foreach ($request->tag as $name) {
+            if (!in_array($name, $existingTags)) {
+              
+                $tagSlug = implode('-', explode(" ", $name));
+
+                $newTag = new Tag([
+                'name' => $name,
+                'slug' => $tagSlug,
+                'detail' => "",
+
+                ]);
+
+                 $newTag->save();  
+                 $idOfRequestTags[] = $newTag->id;
+
+              }else{
+
+                  $idOfRequestTags[] = $name;
+
+              }
+          }
+      }
 
         $slug = implode('-', explode(" ", $request->title));
         $post = Post::find($id);
@@ -112,6 +181,7 @@ class PostController extends Controller
             ]);
 
         $post->save();
+        $post->tags()->sync($idOfRequestTags, true);
         session()->flash('success', 'The post has been updated successfully');
         return redirect()->route('post.show', $post->slug);
     }
@@ -125,6 +195,7 @@ class PostController extends Controller
     public function destroy($slug)
     {
        $post = Post::where('slug', $slug)->first();
+       $post->tags()->detach();
        $post->delete();
        session()->flash('success', 'Post has been deleted');
        return redirect()->route('post.index');

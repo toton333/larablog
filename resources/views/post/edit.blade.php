@@ -1,5 +1,18 @@
 @extends('layouts.app')
 
+@push('css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+@endpush('css')
+
+@push('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script type="text/javascript">
+  
+  $('.selectTags').select2().val({!! json_encode($post->tags()->getRelatedIds()) !!}).trigger('change');
+  $('.selectTags').select2({tags:true});
+</script>
+@endpush('script')
+
 @section('title', 'Edit')
 
 @section('content')
@@ -42,7 +55,7 @@
 		    	<div class="form-group {{ ($errors->first('category')) ? 'has-error' : ''   }} ">
 		    		<label for="category">Category</label>
 
-		    		<select name="category" id="category">
+		    		<select class="form-control" name="category" id="category">
 		    			@foreach($categories as $category)
 			    			@if($post->category)
 	                        <option value="{{$category->id}}"  {{($category->name == $post->category->name)? 'selected': ''  }} >{{$category->name}}</option>
@@ -61,6 +74,29 @@
 					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					  <span class="sr-only">Error:</span>
 					  {{$errors->first('category')}}
+					</div>
+					@endif
+
+		    	</div>
+
+		    	<div class="form-group {{ ($errors->first('tag')) ? 'has-error' : ''   }} ">
+		    		<label for="tag">Tag</label>
+
+		    		<select class="selectTags form-control" name="tag[]" id="tag" multiple="multiple">
+		    			@foreach($tags as $tag)
+                        <option value="{{$tag->id}}"  >{{$tag->name}}</option>
+
+		    			@endforeach
+
+
+		    		</select>
+
+
+		    		@if($errors->first('tag') )
+		    		<div class="alert alert-danger" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  {{$errors->first('tag')}}
 					</div>
 					@endif
 

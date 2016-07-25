@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 Route::resource('post', 'PostController');
 Route::resource('category', 'CategoryController');
+Route::resource('tag', 'TagController', ['except' => ['create']  ]);
 
 
 
