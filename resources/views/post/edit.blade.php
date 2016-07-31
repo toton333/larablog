@@ -7,9 +7,14 @@
 @push('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 <script type="text/javascript">
-  
   $('.selectTags').select2().val({!! json_encode($post->tags()->getRelatedIds()) !!}).trigger('change');
   $('.selectTags').select2({tags:true});
+</script>
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+tinymce.init({ 
+	selector:"textarea", menubar: false, plugins: "link textcolor colorpicker",  
+});
 </script>
 @endpush('script')
 

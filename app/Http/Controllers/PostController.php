@@ -10,6 +10,7 @@ use App\Http\Requests\BlogCreateRequest;
 use App\Post;
 use App\Category;
 use App\Tag;
+use App\Comment;
 
 class PostController extends Controller
 {
@@ -42,6 +43,48 @@ class PostController extends Controller
         return view('post.create')->withCategories($categories)->withTags($tags);
     }
 
+    /*
+     * If new tags are created we save them in tags table
+     * @param  \Illuminate\Http\Request  $request
+    */
+
+    public function tagCreation($request)
+    {
+
+        $idOfRequestTags = []; //this array of tags id are needed for syncing to post_tag table
+
+        
+        
+        if($request->tag){
+            
+            $existingTags = Tag::lists('id')->all();
+
+            foreach ($request->tag as $name) {
+                if (!in_array($name, $existingTags)) {
+                  
+                    $tagSlug = implode('-', explode(" ", $name));
+
+                    $newTag = new Tag([
+                    'name' => $name,
+                    'slug' => $tagSlug,
+                    'detail' => "",
+                    ]);
+
+                     $newTag->save();  
+                     $idOfRequestTags[] = $newTag->id;
+
+                  }else{
+
+                      $idOfRequestTags[] = $name;
+                  }
+            }
+
+        }
+       
+
+        return $idOfRequestTags;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -52,36 +95,7 @@ class PostController extends Controller
     {
 
      //tag creation
-        //if new tags are created , we  save them to tags table
-
-        $idOfRequestTags = []; //this array of tags id are needed for syncing to post_tag table
-
-        $existingTags = Tag::lists('id')->all();
-        
-        
-        foreach ($request->tag as $name) {
-            if (!in_array($name, $existingTags)) {
-              
-                $tagSlug = implode('-', explode(" ", $name));
-
-                $newTag = new Tag([
-                'name' => $name,
-                'slug' => $tagSlug,
-                'detail' => "",
-
-                ]);
-
-                 $newTag->save();  
-                 $idOfRequestTags[] = $newTag->id;
-
-              }else{
-
-                  $idOfRequestTags[] = $name;
-
-              }
-
-        }
-      
+        $idOfRequestTags = $this->tagCreation($request);
 
     //post creation
      $slug = implode('-', explode(" ", $request->title));
@@ -112,7 +126,8 @@ class PostController extends Controller
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->first();
-        return view('post.show')->withPost($post);
+        $comments = $post->comments()->orderBy('id', 'desc')->get();
+        return view('post.show')->withPost($post)->withComments($comments);
     }
 
     /**
@@ -141,33 +156,7 @@ class PostController extends Controller
          //tag creation
         //if new tags are created , we  save them to tags table
 
-        $idOfRequestTags = []; //this array of tags id are needed for syncing to post_tag table
-
-        $existingTags = Tag::lists('id')->all();
-        
-        if($request->tag){
-          foreach ($request->tag as $name) {
-            if (!in_array($name, $existingTags)) {
-              
-                $tagSlug = implode('-', explode(" ", $name));
-
-                $newTag = new Tag([
-                'name' => $name,
-                'slug' => $tagSlug,
-                'detail' => "",
-
-                ]);
-
-                 $newTag->save();  
-                 $idOfRequestTags[] = $newTag->id;
-
-              }else{
-
-                  $idOfRequestTags[] = $name;
-
-              }
-          }
-      }
+       $idOfRequestTags = $this->tagCreation($request);
 
         $slug = implode('-', explode(" ", $request->title));
         $post = Post::find($id);

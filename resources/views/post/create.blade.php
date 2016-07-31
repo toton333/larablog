@@ -9,7 +9,13 @@
 <script type="text/javascript">
   $('.selectTags').select2({tags:true});
 </script>
-@endpush('script')
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script>
+tinymce.init({ 
+	selector:'textarea', menubar: false, plugins: 'link',  
+});
+</script>
+@endpush
 
 @section('title', 'Create')
 
