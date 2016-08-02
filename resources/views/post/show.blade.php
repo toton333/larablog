@@ -5,10 +5,59 @@
 @endpush
 
 @push('script')
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
 tinymce.init({ 
 	selector:'textarea', menubar: false, plugins: 'link',  
+});
+jQuery(document).ready(function($){
+  
+	$('.edit-delete  .js-ajax-delete').click(function(e){
+        e.preventDefault();
+         var deleteUrl = $(this).attr('href');
+         var token = $('#token').val();
+
+        $('<div id="dialog" class="pull-center"></div>').appendTo('body').html('<div"><h4>Are you sure you want to delete this comment?</h4></div>')
+        .dialog({
+        	
+            autoOpen: true,
+            modal   : true,
+            title   : 'Confirm',
+            buttons: {
+            	"Yes" : function(){
+            		
+            		$(this).dialog('close');
+
+            		$.ajaxSetup({
+            		       headers: {
+            		           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+            		       }
+            		   });
+
+            		//Delete request
+            		   $.ajax({
+            		       type:   'DELETE',
+            		       url:    deleteUrl,
+            		       data:   { _token :token },
+            		       success: function(data){
+            		           if (data == "true") {
+            		           	window.location.href=window.location.href;
+            		           };
+            		       }
+            		   });
+
+
+            	},
+            	"No" : function(){
+                    $(this).dialog('close');
+            	}
+            }
+        });
+        
+
+	});
+
 });
 </script>
 @endpush
@@ -16,6 +65,7 @@ tinymce.init({
 @section('title', $post->title)
 
 @section('content')
+
 <div class="row">
 	<div class="col-md-8">
 		  <div class="panel panel-info">
@@ -92,18 +142,24 @@ tinymce.init({
 		  	
 		  		@foreach($comments as $comment)
 		  		<div class="comment">
-		  			<div class="author-info">
-		  				<img src="{{'https://www.gravatar.com/avatar/'.md5(strtolower(trim($comment->user->email))).'?s=50&d=mm' }}" class="author-image" alt="">
+		  			<div class="author-info clearfix">
+		  				<img src="{{'https://www.gravatar.com/avatar/'.md5(strtolower(trim($comment->user->email))).'?s=50&d=mm' }}" class="author-image pull-left" alt="">
 
-		  				<div class="author-name">
+		  				<div class="author-name pull-left">
 		  					<h4>{{$comment->user->name}}</h4>
 		  					<p class="author-time">{{ ($comment->created_at == $comment->updated_at)? '' : 'Last updated : ' }}
                 	        {{ date('M j, Y \a\t H:i a', strtotime($comment->updated_at))}}</p>
 		  				    
 		  				</div>
+		  				<div class="edit-delete pull-right">
+		  					<a href="{{route('comment.edit', $comment->id)}}"><span class="glyphicon glyphicon-pencil edit"></span></a>
+		  					<input type="hidden" id="token" name="_token" value="{{ csrf_token() }}">
+		  					<a class="js-ajax-delete" href="{{route('comment.destroy', $comment->id)}}" ><span class="glyphicon glyphicon-trash"></span></a>
+		  				</div>
 
 		  			</div>
 		  			<div class="comment-content">
+		  				
 		  				{!!$comment->comment!!}
 		  			</div>
 		  		</div>

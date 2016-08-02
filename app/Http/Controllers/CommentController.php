@@ -50,7 +50,7 @@ class CommentController extends Controller
      */
     public function edit($id)
     {
-        //
+        echo $id;
     }
 
     /**
@@ -73,6 +73,9 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::find($id);
+        $comment->delete();
+        session()->flash('success', 'Comment has been deleted');
+        return "true";
     }
 }

@@ -1,12 +1,13 @@
+
 .author-image{
 	width:50px;
 	height: 50px;
 	border-radius: 50%;
-	float:left;
+	
 
 }
 .author-name{
- float: left;
+
  margin-left: 15px;
 }
 .author-name>h4{
@@ -21,8 +22,31 @@
 	margin-bottom: 45px;
 }
 .comment-content{
-	clear: both;
+	
 	margin-left: 65px;
 	font-size: 16px;
 	line-height:1.3em;
+}
+.edit-delete span.edit{
+	color:green;
+}
+.edit-delete a.js-ajax-delete{
+	color:red;
+}
+
+.ui-dialog-titlebar-close {
+  display: none;
+}
+
+.ui-dialog{
+	background: #eeeeee;
+	text-align: center;
+
+}
+
+.ui-dialog-titlebar{
+	background:#f7b64b;
+}
+.ui-dialog-buttonset button{
+ margin:10px;
 }
