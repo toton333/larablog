@@ -50,7 +50,8 @@ class CommentController extends Controller
      */
     public function edit($id)
     {
-        echo $id;
+        $comment = Comment::find($id);
+        return view('comment.edit')->withComment($comment);
     }
 
     /**
@@ -62,7 +63,13 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::find($id);
+        $comment->fill([
+            'comment' => $request->comment,
+            ]);
+        $comment->save();
+        session()->flash('success', 'comment has been updated');
+        return redirect()->route('post.show', $request->post_slug);
     }
 
     /**

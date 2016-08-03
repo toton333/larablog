@@ -13,6 +13,55 @@ tinymce.init({
 });
 jQuery(document).ready(function($){
   
+  //deleting post
+  	$('.delete-post').click(function(e){
+          e.preventDefault();
+           var deleteUrl = $(this).attr('href');
+           var token = $('#token').val();
+
+          $('<div id="dialog" class="pull-center"></div>').appendTo('body').html('<div"><h4>Are you sure you want to delete this post?</h4></div>')
+          .dialog({
+          	
+              autoOpen: true,
+              modal   : true,
+              title   : 'Confirm',
+              buttons: {
+              	"Yes" : function(){
+              		
+              		$(this).dialog('close');
+
+              		$.ajaxSetup({
+              		       headers: {
+              		           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+              		       }
+              		   });
+
+              		//Delete request
+              		   $.ajax({
+              		       type:   'DELETE',
+              		       url:    deleteUrl,
+              		       data:   { _token :token },
+              		       success: function(data){
+              		           if (data == "true") {
+              		           	
+              		           	$(location).attr('href', "{{URL::to('post')}}");
+              		           };
+              		       }
+              		   });
+
+
+              	},
+              	"No" : function(){
+                      $(this).dialog('close');
+              	}
+              }
+          });
+          
+
+  	});
+
+  
+  //deleting comment
 	$('.edit-delete  .js-ajax-delete').click(function(e){
         e.preventDefault();
          var deleteUrl = $(this).attr('href');
@@ -115,12 +164,18 @@ jQuery(document).ready(function($){
 
 
     <div class="col-md-2">
-    	
+    	<a href="{{route('post.destroy', $post->slug)}}" class="btn btn-danger delete-post"  >Delete</a>
+
+
+    	<?php
+    	/*
     	<form action="{{route('post.destroy', $post->slug)}}" method="POST"  >
 				{{csrf_field()}}
 				{{method_field('DELETE')}}
 			   <input type="submit" class="btn btn-danger" value="Delete" >
 			</form>
+		*/
+		?>
     </div>
 
 </div>
@@ -133,7 +188,7 @@ jQuery(document).ready(function($){
 		  <div class="panel-heading">
 		    <h3 class="panel-title">
 		    	<?php
-		    	echo ($comments->all())? "Comments (". $comments->count().")" : "Be the first to comment";
+		    	echo ($comments->all())? "Comments <span class='badge'>". $comments->count()."</span>" : "Be the first to comment";
 
 		    	?>	    	
 		    </h3>

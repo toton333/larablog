@@ -185,8 +185,13 @@ class PostController extends Controller
     {
        $post = Post::where('slug', $slug)->first();
        $post->tags()->detach();
+       if(!$post->comments->isEmpty()){
+           foreach ($post->comments as $comment) {
+               $comment->delete();
+           }
+       }
        $post->delete();
        session()->flash('success', 'Post has been deleted');
-       return redirect()->route('post.index');
+       return "true";
     }
 }
