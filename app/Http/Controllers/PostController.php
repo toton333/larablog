@@ -153,6 +153,11 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+           'title' => 'required|min:3|max:50|unique:posts,title,'.$id,
+           'body'  => 'required',
+
+            ]);
          //tag creation
         //if new tags are created , we  save them to tags table
 
@@ -185,7 +190,7 @@ class PostController extends Controller
     {
        $post = Post::where('slug', $slug)->first();
        $post->tags()->detach();
-       if(!$post->comments->isEmpty()){
+       if(! $post->comments->isEmpty()){
            foreach ($post->comments as $comment) {
                $comment->delete();
            }
@@ -194,4 +199,5 @@ class PostController extends Controller
        session()->flash('success', 'Post has been deleted');
        return "true";
     }
+
 }

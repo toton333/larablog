@@ -95,6 +95,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request,[
+           'name' => 'required|min:3|max:50|unique:categories,name,'.$id,
+           'detail'  => 'required',
+
+            ]);
         $slug = implode('-', explode(" ", $request->name));
         $category = Category::find($id);
         $category->fill([

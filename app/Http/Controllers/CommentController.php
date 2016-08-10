@@ -35,10 +35,6 @@ class CommentController extends Controller
 
      return redirect()->route('post.show', $request->post_slug);
 
-
-
-
-
     }
 
     

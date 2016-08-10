@@ -37,6 +37,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{route('post.index')}}"><i class="fa fa-tachometer" ></i> Post</a></li>
                                 <li><a href="{{route('category.index')}}"><i class="fa fa-tachometer" ></i> Category</a></li>
+                                <li><a href="{{route('tag.index')}}"><i class="fa fa-tachometer" ></i> Tag</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>

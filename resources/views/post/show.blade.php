@@ -17,7 +17,7 @@ jQuery(document).ready(function($){
   	$('.delete-post').click(function(e){
           e.preventDefault();
            var deleteUrl = $(this).attr('href');
-           var token = $('#token').val();
+           var token = $(this).data('token');
 
           $('<div id="dialog" class="pull-center"></div>').appendTo('body').html('<div"><h4>Are you sure you want to delete this post?</h4></div>')
           .dialog({
@@ -45,7 +45,7 @@ jQuery(document).ready(function($){
               		           if (data == "true") {
               		           	
               		           	$(location).attr('href', "{{URL::to('post')}}");
-              		           };
+              		           }
               		       }
               		   });
 
@@ -65,7 +65,7 @@ jQuery(document).ready(function($){
 	$('.edit-delete  .js-ajax-delete').click(function(e){
         e.preventDefault();
          var deleteUrl = $(this).attr('href');
-         var token = $('#token').val();
+         var token = $(this).data('token');
 
         $('<div id="dialog" class="pull-center"></div>').appendTo('body').html('<div"><h4>Are you sure you want to delete this comment?</h4></div>')
         .dialog({
@@ -158,13 +158,13 @@ jQuery(document).ready(function($){
 	
 	<div class="col-md-2 ">
 			
-			<a href="{{route('post.edit', $post->slug)}}" type="button" class="btn btn-success pull-right ">Edit</a>		     
+			<a href="{{route('post.edit', $post->slug)}}"  type="button" class="btn btn-success pull-right ">Edit</a>		     
 
 	</div>
 
 
     <div class="col-md-2">
-    	<a href="{{route('post.destroy', $post->slug)}}" class="btn btn-danger delete-post"  >Delete</a>
+    	<a href="{{route('post.destroy', $post->slug)}}" data-token="{{csrf_token()}}" class="btn btn-danger delete-post"  >Delete</a>
 
 
     	<?php
@@ -208,8 +208,8 @@ jQuery(document).ready(function($){
 		  				</div>
 		  				<div class="edit-delete pull-right">
 		  					<a href="{{route('comment.edit', $comment->id)}}"><span class="glyphicon glyphicon-pencil edit"></span></a>
-		  					<input type="hidden" id="token" name="_token" value="{{ csrf_token() }}">
-		  					<a class="js-ajax-delete" href="{{route('comment.destroy', $comment->id)}}" ><span class="glyphicon glyphicon-trash"></span></a>
+		  					
+		  					<a data-token="{{csrf_token()}}" class="js-ajax-delete" href="{{route('comment.destroy', $comment->id)}}" ><span class="glyphicon glyphicon-trash"></span></a>
 		  				</div>
 
 		  			</div>

@@ -87,6 +87,9 @@ class TagController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+          'name' => 'required|min:3|max:50|unique:tags,name,'.$id,
+            ]);
         $slug = implode('-', explode(" ", $request->name));
         $tag = Tag::find($id);
         $tag->fill([
