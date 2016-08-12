@@ -142,6 +142,7 @@ jQuery(document).ready(function($){
 			  	{!! $post->body !!}
 			  </div>
 			  <div class="panel-footer">
+          <h6>Posted by: {{$post->user->name}}</h6>
 			  	<h6>
 			  		@if($post->created_at == $post->updated_at)
 			  		Created at: {{date('M j, Y | h:ia', strtotime($post->created_at)  )}}

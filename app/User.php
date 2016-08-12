@@ -28,4 +28,8 @@ class User extends Authenticatable
 
         return $this->hasMany('App\Comment');
     }
+
+    public function posts(){
+        return $this->hasMany('App\Post');
+    }
 }

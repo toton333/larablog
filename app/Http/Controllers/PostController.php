@@ -104,10 +104,14 @@ class PostController extends Controller
            'title' => $request->title,
            'slug'  => $slug,
            'body'  => $request->body,
-           'category_id' => $request->category
+           'category_id' => $request->category,
+           'user_id'  => $request->user()->id, //$request always has current authenticated user
 
         ]);
+
       $post->save();
+      
+       // $request->user()->posts()->save($post);
 
       $post->tags()->sync($idOfRequestTags, false);
 

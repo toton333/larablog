@@ -267,6 +267,7 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         'AddCategoryIdColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_07_19_055612_add_category_id_column_on_post.php',
         'AddSlugColumnOnCategory' => __DIR__ . '/../..' . '/database/migrations/2016_07_21_182049_add_slug_column_on_category.php',
         'AddSlugColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_07_21_175455_add_slug_column_on_post.php',
+        'AddUserIdColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_08_12_150847_add_user_id_column_on_post.php',
         'CreateCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_17_155934_create_categories_table.php',
         'CreateCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_30_055544_create_comments_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
