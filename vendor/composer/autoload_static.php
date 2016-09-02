@@ -14,8 +14,11 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        'cb61d74ad51d00867155534456b38b23' => __DIR__ . '/..' . '/mews/purifier/src/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -54,11 +57,13 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         'P' => 
         array (
             'Psy\\' => 4,
+            'Psr\\Http\\Message\\' => 17,
             'PhpParser\\' => 10,
         ),
         'M' => 
         array (
             'Monolog\\' => 8,
+            'Mews\\Purifier\\' => 14,
         ),
         'L' => 
         array (
@@ -66,7 +71,12 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         ),
         'I' => 
         array (
+            'Intervention\\Image\\' => 19,
             'Illuminate\\' => 11,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
         ),
         'F' => 
         array (
@@ -175,6 +185,10 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         array (
             0 => __DIR__ . '/..' . '/psy/psysh/src/Psy',
         ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -183,13 +197,25 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
+        'Mews\\Purifier\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mews/purifier/src',
+        ),
         'League\\Flysystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
+        'Intervention\\Image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+        ),
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
         'Faker\\' => 
         array (
@@ -247,6 +273,13 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
                 0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
             ),
         ),
+        'H' => 
+        array (
+            'HTMLPurifier' => 
+            array (
+                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+            ),
+        ),
         'D' => 
         array (
             'Doctrine\\Common\\Inflector\\' => 
@@ -265,11 +298,14 @@ class ComposerStaticInit9d9c737860caaa725acd13e51e4a7149
 
     public static $classMap = array (
         'AddCategoryIdColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_07_19_055612_add_category_id_column_on_post.php',
+        'AddImageColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_08_21_143103_add_image_column_on_post.php',
         'AddSlugColumnOnCategory' => __DIR__ . '/../..' . '/database/migrations/2016_07_21_182049_add_slug_column_on_category.php',
         'AddSlugColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_07_21_175455_add_slug_column_on_post.php',
         'AddUserIdColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_08_12_150847_add_user_id_column_on_post.php',
+        'AddViewColumnOnPost' => __DIR__ . '/../..' . '/database/migrations/2016_09_02_152927_add_view_column_on_post.php',
         'CreateCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_17_155934_create_categories_table.php',
         'CreateCommentsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_30_055544_create_comments_table.php',
+        'CreateLikesTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_31_081413_create_likes_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreatePostTagTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_22_151607_create_post_tag_table.php',
         'CreatePostsTable' => __DIR__ . '/../..' . '/database/migrations/2016_07_15_091213_create_posts_table.php',

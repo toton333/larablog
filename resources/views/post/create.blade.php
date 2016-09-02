@@ -28,7 +28,7 @@ tinymce.init({
 		    <h3 class="panel-title">Create New Post</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="{!! route('post.store') !!}" method="POST">
+		    <form action="{!! route('post.store') !!}" method="POST" enctype="multipart/form-data"  >
                {{csrf_field()}}
 		    	<div class="form-group {{ ($errors->first('title')) ? 'has-error' : ''   }} ">
 		    		<label for="title">Title</label>
@@ -40,8 +40,18 @@ tinymce.init({
 					  {{$errors->first('title')}}
 					</div>
 					@endif
-
 		    	</div>
+    	    	<div class="form-group {{ ($errors->first('featured_image')) ? 'has-error' : ''   }} ">
+    	    		<label for="title">Featured Image</label>
+    	    		<input type="file" class="form-control" name="featured_image" id="featured_image" >
+    	    		@if($errors->first('featured_image') )
+    	    		<div class="alert alert-danger" role="alert">
+    				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    				  <span class="sr-only">Error:</span>
+    				  {{$errors->first('featured_image')}}
+    				</div>
+    				@endif
+    	    	</div>
 		    	<div class="form-group {{ ($errors->first('body')) ? 'has-error' : ''   }} ">
 		    		<label for="body">Body</label>
 		    		<textarea  class="form-control" rows="10" name="body" id="body" placeholder="Enter content here..." ></textarea>

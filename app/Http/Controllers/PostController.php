@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\BlogCreateRequest;
 
+use App\Like;
 use App\Post;
 use App\Category;
 use App\Tag;
 use App\Comment;
+use Image;
+use Storage;
 
 class PostController extends Controller
 {
@@ -98,16 +101,24 @@ class PostController extends Controller
         $idOfRequestTags = $this->tagCreation($request);
 
     //post creation
-     $slug = implode('-', explode(" ", $request->title));
+     $slug = implode('-', explode(" ", strip_tags(trim($request->title))));
       
       $post = new Post([
-           'title' => $request->title,
+           'title' => strip_tags(trim($request->title)),
            'slug'  => $slug,
-           'body'  => $request->body,
+           'body'  => clean($request->body),
            'category_id' => $request->category,
            'user_id'  => $request->user()->id, //$request always has current authenticated user
 
         ]);
+      if($request->hasFile('featured_image')){
+        $image = $request->file('featured_image');
+        $filename = time().'.'.$image->getClientOriginalExtension();
+        $location = public_path('images/'.$filename);
+        Image::make($image)->resize(700, 400)->save($location);
+        $post->image = $filename;
+
+      }
 
       $post->save();
       
@@ -130,6 +141,9 @@ class PostController extends Controller
     public function show($slug)
     {
         $post = Post::where('slug', $slug)->first();
+        $post->view = $post->view +1;
+        $post->update();
+
         $comments = $post->comments()->orderBy('id', 'desc')->get();
         return view('post.show')->withPost($post)->withComments($comments);
     }
@@ -160,6 +174,7 @@ class PostController extends Controller
         $this->validate($request,[
            'title' => 'required|min:3|max:50|unique:posts,title,'.$id,
            'body'  => 'required',
+           'featured_image' => 'sometimes|image',
 
             ]);
          //tag creation
@@ -167,16 +182,30 @@ class PostController extends Controller
 
        $idOfRequestTags = $this->tagCreation($request);
 
-        $slug = implode('-', explode(" ", $request->title));
+        $slug = implode('-', explode(" ", strip_tags(trim($request->title))));
         $post = Post::find($id);
 
+
+
         $post->fill([
-           'title' => $request->title,
+           'title' => strip_tags(trim($request->title)),
            'slug'  => $slug,
-           'body'  => $request->body,
+           'body'  => clean($request->body),
            'category_id' => $request->category,
 
             ]);
+
+        if($request->hasFile('featured_image')){
+          $image = $request->file('featured_image');
+          $filename = time().'.'.$image->getClientOriginalExtension();
+          $location = public_path('images/'.$filename);
+          Image::make($image)->resize(700, 400)->save($location);
+          $oldfilename = $post->image;
+          $post->image = $filename;
+          Storage::delete($oldfilename);
+
+        }
+
 
         $post->save();
         $post->tags()->sync($idOfRequestTags, true);
@@ -199,9 +228,55 @@ class PostController extends Controller
                $comment->delete();
            }
        }
+        if(! $post->likes->isEmpty()){
+           foreach ($post->likes as $like) {
+               $like->delete();
+           }
+       }
+       Storage::delete($post->image);
        $post->delete();
        session()->flash('success', 'Post has been deleted');
        return "true";
+    }
+
+
+
+    public function like(Request $request){
+
+      $post_id = $request['postId'];
+      
+        $is_like = $request['isLike'] == 'true';
+        
+        $update = false;
+        $post = Post::find($post_id);
+
+        
+        if (!$post) {
+            return null;
+        }
+        $user = auth()->user();
+       
+        $like = $user->likes()->where('post_id', $post_id)->first();
+        if ($like) {
+            $already_like = $like->like;
+            $update = true;
+            if ($already_like == $is_like) {
+                $like->delete();
+                return null;
+            }
+        } else {
+            $like = new Like();
+        }
+        $like->like = $is_like;
+        $like->user_id = $user->id;
+        $like->post_id = $post->id;
+        if ($update) {
+            $like->update();
+        } else {
+            $like->save();
+        }
+        return null;
+   
     }
 
 }

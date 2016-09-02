@@ -29,9 +29,24 @@ tinymce.init({
 		    <h3 class="panel-title">Edit the Post</h3>
 		  </div>
 		  <div class="panel-body">
-		    <form action="{!! route('post.update', $post->id) !!}" method= 'POST' >
+		    <form action="{!! route('post.update', $post->id) !!}" method= 'POST' enctype="multipart/form-data" >
 		    	{{csrf_field() }}
 		    	{{method_field('PUT')}}
+		    	<div class="form-group {{ ($errors->first('featured_image')) ? 'has-error' : ''   }} ">
+		    		<label for="title">Featured Image</label>
+                    @if($post->image)
+		    		<img src="{{asset('images/'.$post->image)}}" alt=""  width="700" height="300"  >
+                    @endif
+		    		<input type="file" class="form-control" name="featured_image" id="featured_image"  >
+		    		@if($errors->first('featured_image') )
+		    		<div class="alert alert-danger" role="alert">
+					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  <span class="sr-only">Error:</span>
+					  {{$errors->first('featured_image')}}
+					</div>
+					@endif
+
+		    	</div>
 		    	<div class="form-group {{ ($errors->first('title')) ? 'has-error' : ''   }} ">
 		    		<label for="title">Title</label>
 		    		<input type="text" class="form-control" name="title" id="title" value="{{$post->title}}" >
@@ -40,6 +55,7 @@ tinymce.init({
 					  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 					  <span class="sr-only">Error:</span>
 					  {{$errors->first('title')}}
+					  
 					</div>
 					@endif
 

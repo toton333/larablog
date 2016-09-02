@@ -17,6 +17,11 @@ Route::get('/', function () {
 
 //post
 Route::resource('post', 'PostController');
+Route::post('post/{post}/like',[
+       'uses' => 'PostController@like',
+       'as' => 'post.like'
+
+	]);
 
 //category
 Route::resource('category', 'CategoryController');

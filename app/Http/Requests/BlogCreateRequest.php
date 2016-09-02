@@ -26,7 +26,8 @@ class BlogCreateRequest extends Request
         return [
             'title' => 'required|min:3|max:50',
             'body'  => 'required',
-            'tag'   => 'unique:tags,name'
+            'tag'   => 'unique:tags,name',
+            'featured_image' => 'sometimes|image',
         ];
     }
 
@@ -41,7 +42,7 @@ class BlogCreateRequest extends Request
 
         return [
 
-            'title.required' => 'Please insert a :attribute of this post ',
+            'title.required' => 'Please insert a title of this post ',
             'body.required'  => 'Please write some content'
 
         ];

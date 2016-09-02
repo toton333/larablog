@@ -46,9 +46,9 @@ class CategoryController extends Controller
      */
     public function store(CategoryCreateRequest $request)
     {
-        $slug = implode('-', explode(" ", $request->name));
+        $slug = implode('-', explode(" ", trim($request->name)));
         $category = new Category([
-            'name' => $request->name,
+            'name' => trim($request->name),
             'slug' => $slug,
             'detail' => $request->detail,
 
@@ -100,10 +100,10 @@ class CategoryController extends Controller
            'detail'  => 'required',
 
             ]);
-        $slug = implode('-', explode(" ", $request->name));
+        $slug = implode('-', explode(" ", trim($request->name)));
         $category = Category::find($id);
         $category->fill([
-           'name' => $request->name,
+           'name' => trim($request->name),
            'slug' => $slug,
            'detail'  => $request->detail
 

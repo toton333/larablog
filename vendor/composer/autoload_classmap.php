@@ -7,11 +7,14 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddCategoryIdColumnOnPost' => $baseDir . '/database/migrations/2016_07_19_055612_add_category_id_column_on_post.php',
+    'AddImageColumnOnPost' => $baseDir . '/database/migrations/2016_08_21_143103_add_image_column_on_post.php',
     'AddSlugColumnOnCategory' => $baseDir . '/database/migrations/2016_07_21_182049_add_slug_column_on_category.php',
     'AddSlugColumnOnPost' => $baseDir . '/database/migrations/2016_07_21_175455_add_slug_column_on_post.php',
     'AddUserIdColumnOnPost' => $baseDir . '/database/migrations/2016_08_12_150847_add_user_id_column_on_post.php',
+    'AddViewColumnOnPost' => $baseDir . '/database/migrations/2016_09_02_152927_add_view_column_on_post.php',
     'CreateCategoriesTable' => $baseDir . '/database/migrations/2016_07_17_155934_create_categories_table.php',
     'CreateCommentsTable' => $baseDir . '/database/migrations/2016_07_30_055544_create_comments_table.php',
+    'CreateLikesTable' => $baseDir . '/database/migrations/2016_08_31_081413_create_likes_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreatePostTagTable' => $baseDir . '/database/migrations/2016_07_22_151607_create_post_tag_table.php',
     'CreatePostsTable' => $baseDir . '/database/migrations/2016_07_15_091213_create_posts_table.php',

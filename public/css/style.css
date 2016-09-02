@@ -50,3 +50,14 @@ a.js-ajax-delete{
 .ui-dialog-buttonset button{
  margin:10px;
 }
+.interaction{
+	width: 200px;
+	text-align: center;
+}
+.interaction .view{
+	border-bottom: 1px solid blue;
+}
+.like{
+
+	color:grey;
+}

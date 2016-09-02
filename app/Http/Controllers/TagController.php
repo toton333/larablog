@@ -39,9 +39,9 @@ class TagController extends Controller
      */
     public function store(TagCreateRequest $request)
     {
-        $slug = implode('-', explode(" ", $request->name));
+        $slug = implode('-', explode(" ", trim($request->name)));
         $tag = new Tag([
-            'name' => $request->name,
+            'name' => trim($request->name),
             'slug' => $slug,
             'description' => $request->description,
 
@@ -90,10 +90,10 @@ class TagController extends Controller
         $this->validate($request, [
           'name' => 'required|min:3|max:50|unique:tags,name,'.$id,
             ]);
-        $slug = implode('-', explode(" ", $request->name));
+        $slug = implode('-', explode(" ", trim($request->name)));
         $tag = Tag::find($id);
         $tag->fill([
-           'name' => $request->name,
+           'name' => trim($request->name),
            'slug' => $slug,
            'description'  => $request->detail
 

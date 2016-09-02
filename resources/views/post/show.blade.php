@@ -12,6 +12,8 @@ tinymce.init({
 	selector:'textarea', menubar: false, plugins: 'link',  
 });
 jQuery(document).ready(function($){
+
+ 
   
   //deleting post
   	$('.delete-post').click(function(e){
@@ -107,6 +109,81 @@ jQuery(document).ready(function($){
 
 	});
 
+//like post
+
+var token = '{{ Session::token() }}';
+var urlLike = "{{ route('post.like', $post->id) }}";
+
+$('.like').click(function(e){
+  e.preventDefault();
+  postId = "{{$post->id}}";
+  var isLike = $(this).attr('id') == "like";
+
+  $.ajax({
+
+   method : 'POST',
+   url :  urlLike,
+   data : {isLike:isLike, postId:postId, _token:token},
+   success : function(){
+              var likeCount = parseInt($('#likeCount').text() );
+              var dislikeCount = parseInt($('#dislikeCount').text() );
+
+            if (isLike) {
+              
+                if($('#like').attr('style') == null  ){
+
+                  $('#like').css('color', 'green');
+
+                   $('#likeCount').text(likeCount+1);
+
+                }else{
+
+                  $('#like').removeAttr('style');
+                  $('#likeCount').text(likeCount-1);
+
+                }
+
+                if($('#dislike').attr('style') != null   ){
+                  $('#dislike').removeAttr('style');
+                  $('#dislikeCount').text(dislikeCount-1);
+
+                }
+                
+            } else {
+
+                if($('#dislike').attr('style') == null  ){
+
+                  $('#dislike').css('color', 'red');
+                  $('#dislikeCount').text(dislikeCount+1);
+
+
+                }else{
+
+                  $('#dislike').removeAttr('style');
+                  $('#dislikeCount').text(dislikeCount-1);
+
+                }
+                  if($('#like').attr('style') != null   ){
+                    $('#like').removeAttr('style');
+                    $('#likeCount').text(likeCount-1);
+                  }
+            }
+
+    
+   }
+
+
+  });
+
+  
+
+
+
+
+});
+
+
+
 });
 </script>
 @endpush
@@ -117,9 +194,15 @@ jQuery(document).ready(function($){
 
 <div class="row">
 	<div class="col-md-8">
+    @if($post->image)
+          <img src="{{asset('images/'.$post->image)}}" alt=""  width="750" height="400" >
+
+          @endif
 		  <div class="panel panel-info">
+
 		  <!-- Default panel contents -->
-			  <div class="panel-heading">
+			  <div class="panel-heading clearfix">
+
 			  	<h3 >{{$post->title}}</h3>
                 @if($post->category)
 			  	Category : <a href="{{route('category.show', $post->category->slug)}}"><span class="label label-default">{{$post->category->name}}</span></a> 
@@ -134,6 +217,30 @@ jQuery(document).ready(function($){
                    @endforeach
                 
                 @endif
+
+                <div class="interaction pull-right">
+
+                   <div class="view">{{$post->view}} views</div>
+
+                   <div class="like-dislike clearfix">
+                      <span class="pull-left">
+                        <a {{ Auth::user()->likes()->where('post_id', $post->id)->first() ? Auth::user()->likes()->where('post_id', $post->id)->first()->like == 1 ? 'style=color:green' : '' : ''  }} class="like" id="like"  href="#">
+                          
+                          <i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+                        </a>
+                         <span id="likeCount">{{$post->likes()->where('like', 1)->count()}}</span>
+                      </span> 
+
+                      <span class="pull-right">
+                        <a {{ Auth::user()->likes()->where('post_id', $post->id)->first() ? Auth::user()->likes()->where('post_id', $post->id)->first()->like == 0 ? 'style=color:red' : '' : ''  }} class="like" id="dislike"  href="#">
+                          
+                          <i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+                        </a> 
+                         <span id="dislikeCount">{{$post->likes()->where('like', 0)->count()}}</span>
+                      </span>
+                   </div>    
+                      
+                </div>
              
 			  	
 			  </div>
