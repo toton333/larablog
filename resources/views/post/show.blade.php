@@ -263,14 +263,15 @@ $('.like').click(function(e){
 			  </div>
 		</div>
 	</div>
-	
+
+	@if(Auth::user()->role  == 'admin'  or $post->user->id == Auth::user()->id)
 	<div class="col-md-2 ">
 			
 			<a href="{{route('post.edit', $post->slug)}}"  type="button" class="btn btn-success pull-right ">Edit</a>		     
 
 	</div>
 
-
+  
     <div class="col-md-2">
     	<a href="{{route('post.destroy', $post->slug)}}" data-token="{{csrf_token()}}" class="btn btn-danger delete-post"  >Delete</a>
 
@@ -285,6 +286,7 @@ $('.like').click(function(e){
 		*/
 		?>
     </div>
+    @endif
 
 </div>
 
@@ -314,11 +316,13 @@ $('.like').click(function(e){
                 	        {{ date('M j, Y \a\t H:i a', strtotime($comment->updated_at))}}</p>
 		  				    
 		  				</div>
+              @if(Auth::user()->role  == 'admin'  or $comment->user->id == Auth::user()->id)
 		  				<div class="edit-delete pull-right">
 		  					<a href="{{route('comment.edit', $comment->id)}}"><span class="glyphicon glyphicon-pencil edit"></span></a>
 		  					
 		  					<a data-token="{{csrf_token()}}" class="js-ajax-delete" href="{{route('comment.destroy', $comment->id)}}" ><span class="glyphicon glyphicon-trash"></span></a>
 		  				</div>
+              @endif
 
 		  			</div>
 		  			<div class="comment-content">

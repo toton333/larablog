@@ -47,7 +47,11 @@ class CommentController extends Controller
     public function edit($id)
     {
         $comment = Comment::find($id);
-        return view('comment.edit')->withComment($comment);
+        if(auth()->user()->role  == 'admin'  or $comment->user->id == auth()->user()->id){ 
+          return view('comment.edit')->withComment($comment);
+        }else{
+            return redirect()->back();
+        }
     }
 
     /**
@@ -77,8 +81,12 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $comment = Comment::find($id);
-        $comment->delete();
-        session()->flash('success', 'Comment has been deleted');
-        return "true";
+        if(auth()->user()->role  == 'admin'  or $comment->user->id == auth()->user()->id){ 
+            $comment->delete();
+            session()->flash('success', 'Comment has been deleted');
+            return "true";
+      }else{
+        return redirect()->back();
+      }
     }
 }

@@ -11,9 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//application landing page
+Route::get('/', [
+     'uses' => 'PostController@landing',
+     'as'   => 'landing'
+	]);
 
 //post
 Route::resource('post', 'PostController');

@@ -20,7 +20,7 @@ class PostController extends Controller
 
     public function __construct(){
 
-        $this->middleware('auth');
+        $this->middleware('auth')->except('landing');
     }
 
     /**
@@ -41,9 +41,13 @@ class PostController extends Controller
      */
     public function create()
     {
+      if(auth()->user()->role != 'subscriber'){
         $categories = Category::all();
         $tags       = Tag::all();
         return view('post.create')->withCategories($categories)->withTags($tags);
+         }else{
+          return redirect()->back();
+         }
     }
 
     /*
@@ -156,10 +160,19 @@ class PostController extends Controller
      */
     public function edit($slug)
     {
+
         $post = Post::where('slug', $slug)->first();
-        $categories = Category::all();
-        $tags       = Tag::all();
-        return view('post.edit')->withPost($post)->withCategories($categories)->withTags($tags);
+
+        if(auth()->user()->role  == 'admin'  or $post->user->id == auth()->user()->id){
+          $categories = Category::all();
+          $tags       = Tag::all();
+          return view('post.edit')->withPost($post)->withCategories($categories)->withTags($tags);
+
+       }else{
+
+        return redirect()->back();
+
+      }
     }
 
     /**
@@ -221,22 +234,28 @@ class PostController extends Controller
      */
     public function destroy($slug)
     {
-       $post = Post::where('slug', $slug)->first();
-       $post->tags()->detach();
-       if(! $post->comments->isEmpty()){
-           foreach ($post->comments as $comment) {
-               $comment->delete();
+      
+         $post = Post::where('slug', $slug)->first();
+
+         if(auth()->user()->role  == 'admin'  or $post->user->id == auth()->user()->id){
+           $post->tags()->detach();
+           if(! $post->comments->isEmpty()){
+               foreach ($post->comments as $comment) {
+                   $comment->delete();
+               }
            }
-       }
-        if(! $post->likes->isEmpty()){
-           foreach ($post->likes as $like) {
-               $like->delete();
+            if(! $post->likes->isEmpty()){
+               foreach ($post->likes as $like) {
+                   $like->delete();
+               }
            }
+           Storage::delete($post->image);
+           $post->delete();
+           session()->flash('success', 'Post has been deleted');
+           return "true";
+       }else{
+        return redirect()->back();
        }
-       Storage::delete($post->image);
-       $post->delete();
-       session()->flash('success', 'Post has been deleted');
-       return "true";
     }
 
 
@@ -277,6 +296,12 @@ class PostController extends Controller
         }
         return null;
    
+    }
+
+    public function landing(){
+
+      $posts = Post::orderBy('id', 'desc')->get();
+      return view('landing')->withPosts($posts);
     }
 
 }

@@ -25,6 +25,8 @@
 			  </table>
 		</div>
 	</div>
+
+	@if(Auth::user()->role != 'subscriber')
 	<div class="col-md-2 col-md-offset-1 well">
 		<form action="{{route('tag.index')}}" method="POST" >
 			{{csrf_field()}}
@@ -56,6 +58,7 @@
 
 		</form>
 	</div>
+	@endif
 </div>
 
 @endsection

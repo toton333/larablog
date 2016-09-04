@@ -52,6 +52,8 @@
 		</div>
 		
 	</div>
+
+	@if(Auth::user()->role != 'subscriber')
 	
 	<div class="col-md-2 ">
 			
@@ -67,6 +69,7 @@
 			   <input type="submit" class="btn btn-danger" value="Delete" >
 			</form>
     </div>
+    @endif
 
 </div>
 @endsection

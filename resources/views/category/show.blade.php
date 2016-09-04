@@ -52,21 +52,24 @@
 		</div>
 		
 	</div>
+
+	@if(Auth::user()->role == 'admin')
 	
-	<div class="col-md-2 ">
-			
-			<a href="{{route('category.edit', $category->slug)}}" type="button" class="btn btn-success pull-right ">Edit</a>		     
+		<div class="col-md-2 ">
+				
+				<a href="{{route('category.edit', $category->slug)}}" type="button" class="btn btn-success pull-right ">Edit</a>		     
 
-	</div>
+		</div>
 
-    <div class="col-md-2">
-    	
-    	<form action="{{route('category.destroy', $category->slug)}}" method="POST"  >
-				{{csrf_field()}}
-				{{method_field('DELETE')}}
-			   <input type="submit" class="btn btn-danger" value="Delete" >
-			</form>
-    </div>
+	    <div class="col-md-2">
+	    	
+	    	<form action="{{route('category.destroy', $category->slug)}}" method="POST"  >
+					{{csrf_field()}}
+					{{method_field('DELETE')}}
+				   <input type="submit" class="btn btn-danger" value="Delete" >
+				</form>
+	    </div>
+    @endif
 
 </div>
 @endsection

@@ -73,6 +73,9 @@ class TagController extends Controller
      */
     public function edit($slug)
     {
+        if(auth()->user()->role == 'subscriber'  ){
+             return redirect()->back();
+        }
          $tag = Tag::where('slug', $slug)->first();
 
         return view('tag.edit')->withTag($tag);
@@ -112,6 +115,9 @@ class TagController extends Controller
      */
     public function destroy($slug)
     {
+        if(auth()->user()->role == 'subscriber'  ){
+             return redirect()->back();
+        }
         $tag = Tag::where('slug', $slug)->first();
         $tag->posts()->detach();
        $tag->delete();

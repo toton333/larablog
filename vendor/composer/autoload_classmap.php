@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AddCategoryIdColumnOnPost' => $baseDir . '/database/migrations/2016_07_19_055612_add_category_id_column_on_post.php',
     'AddImageColumnOnPost' => $baseDir . '/database/migrations/2016_08_21_143103_add_image_column_on_post.php',
+    'AddRoleColumnOnUser' => $baseDir . '/database/migrations/2016_09_03_085715_add_role_column_on_user.php',
     'AddSlugColumnOnCategory' => $baseDir . '/database/migrations/2016_07_21_182049_add_slug_column_on_category.php',
     'AddSlugColumnOnPost' => $baseDir . '/database/migrations/2016_07_21_175455_add_slug_column_on_post.php',
     'AddUserIdColumnOnPost' => $baseDir . '/database/migrations/2016_08_12_150847_add_user_id_column_on_post.php',

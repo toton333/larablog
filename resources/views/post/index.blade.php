@@ -26,7 +26,9 @@
 		</div>
 	</div>
 	<div class="col-md-4">
+		@if(Auth::user()->role != 'subscriber')
 		<a href="{{route('post.create')}}" type="button" class="btn btn-primary pull-right">Create new post</a>
+		@endif
 	</div>
 </div>
 

@@ -26,7 +26,9 @@
 		</div>
 	</div>
 	<div class="col-md-4">
+		@if(Auth::user()->role == 'admin')
 		<a href="{{route('category.create')}}" type="button" class="btn btn-primary pull-right">Create new category</a>
+	    @endif
 	</div>
 </div>
 

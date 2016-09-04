@@ -35,6 +35,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        if(auth()->user()->role != 'admin'  ){
+           return redirect()->back();
+        }
         return view('category.create');
     }
 
@@ -81,6 +84,9 @@ class CategoryController extends Controller
      */
     public function edit($slug)
     {
+        if(auth()->user()->role != 'admin'  ){
+           return redirect()->back();
+        }
         $category = Category::where('slug', $slug)->first();
 
         return view('category.edit')->withCategory($category);
@@ -122,6 +128,9 @@ class CategoryController extends Controller
      */
     public function destroy($slug)
     {
+        if(auth()->user()->role != 'admin'  ){
+           return redirect()->back();
+        }
         $category = Category::where('slug', $slug)->first();
        $category->delete();
        session()->flash('success', 'Category has been deleted');
